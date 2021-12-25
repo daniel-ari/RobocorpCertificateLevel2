@@ -5,15 +5,25 @@ Library           RPA.HTTP
 Library           RPA.Excel.Files
 Library           RPA.Tables
 Library           RPA.PDF
+Library           RPA.Archive
+Library           RPA.Dialogs
+Library           RPA.FileSystem
+Library           OperatingSystem
+Library           Collections
+Library           RPA.Robocorp.Vault
 
 *** Keywords ***
 Open the robot order website
     Open Available Browser    ${URL_ORDERWEBSITE}    maximize=true
+    ${logout_visible}    Is Element Visible    logout
+    IF    ${logout_visible} == ${TRUE}
+        Click Button    logout
+    END
 
 Close the annoying modal
-    ${yep_i_give_up_my_rights_button_exists}    Does Page Contain Button    //*[@id="root"]/div/div[2]/div/div/div/div/div/button[2]
+    ${yep_i_give_up_my_rights_button_exists}    Does Page Contain Button    css:button[class="btn btn-warning"]
     IF    ${yep_i_give_up_my_rights_button_exists} == ${TRUE}
-        Click Button    //*[@id="root"]/div/div[2]/div/div/div/div/div/button[2]
+        Click Button    css:button[class="btn btn-warning"]
     END
 
 Get orders
@@ -62,14 +72,56 @@ Take a screenshot of the robot
 
 Go to order another robot
     Click Button    id:order-another
-    Check if error occurred    order-another
+    # Check if error occurred    order-another # When clicking enter another order, there is no error alert possible
 
 Check if error occurred
     [Arguments]    ${button_id}
-    ${error_exists}=    Is Element Visible    css:div[class="alert alert-danger"]
-    IF    ${error_exists} == ${TRUE}
-        # If error exists, request input from user to solve that issue somehow.
-        ${error_message}=    Get Text    //*[@id="root"]/div/div[1]/div/div[1]/div
-        Log    Error thrown. Message: ${error_message}
-        Click Button    id:${button_id}
+    FOR    ${i}    IN RANGE    10
+        ${error_exists}=    Is Element Visible    css:div[class="alert alert-danger"]
+        IF    ${error_exists} == ${TRUE}
+            # If error exists, request input from user to solve that issue somehow.
+            ${error_message}=    Get Text    //*[@id="root"]/div/div[1]/div/div[1]/div
+            Log    Error thrown. Message: ${error_message}
+            Click Button    id:${button_id}
+        END
+        Exit For Loop If    ${error_exists} == ${FALSE}
     END
+
+Embed the robot screenshot to the receipt PDF file
+    [Arguments]    ${screenshot}    ${pdf}    ${Order number}
+    Add Watermark Image To PDF
+    ...    image_path=${screenshot}
+    ...    source_path=${pdf}
+    ...    output_path=${OUTPUT_DIR}${/}RobotOrders${/}RobotOrder${Order number}.pdf
+
+Create a ZIP file of the receipts
+    Archive Folder With Zip    ${OUTPUT_DIR}${/}RobotOrders    ${OUTPUT_DIR}${/}RobotOrders.zip
+
+Logout and close browser
+    Close the annoying modal
+    ${logout_visible}    Is Element Visible    logout
+    IF    ${logout_visible} == ${TRUE}
+        Click Button    logout
+    END
+    Close Browser
+
+Confirmation dialog
+    Add icon    Warning
+    Add heading    Do you want to delete all unused data, Boss?
+    Add submit buttons    buttons=No,Yes    default=Yes
+    ${result}=    Run dialog
+    IF    $result.submit == "Yes"
+        ${pdf_to_delete}=    List Directory    ${OUTPUT_DIR}    *.pdf    absolute
+        ${png_to_delete}=    List Directory    ${OUTPUT_DIR}    *.png    absolute
+        ${files_to_delete}=    Combine Lists    ${pdf_to_delete}    ${png_to_delete}
+        FOR    ${file}    IN    @{files_to_delete}
+            RPA.FileSystem.Remove File    ${file}
+        END
+        RPA.FileSystem.Remove Directory    ${OUTPUT_DIR}${/}RobotOrders    recursive:true
+        RPA.FileSystem.Remove File    ${OUTPUT_DIR}${/}orders.csv
+    END
+
+Leaking credentials whupsi
+    ${secret}=    Get Secret    credentials
+    Log    ${secret}[username]
+    Log    ${secret}[password]

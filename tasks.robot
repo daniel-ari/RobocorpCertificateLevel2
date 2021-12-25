@@ -23,8 +23,10 @@ Order robots from RobotSpareBin Industries Inc
         Log    ${pdf}
         ${screenshot}=    Take a screenshot of the robot    ${row}[Order number]
         Log    ${screenshot}
-        #    Embed the robot screenshot to the receipt PDF file    ${screenshot}    ${pdf}
+        Embed the robot screenshot to the receipt PDF file    ${screenshot}    ${pdf}    ${row}[Order number]
         Go to order another robot
     END
-    # Create a ZIP file of the receipts
-    # [Teardown]    Log out and close browser
+    Create a ZIP file of the receipts
+    Confirmation dialog
+    Leaking credentials whupsi
+    [Teardown]    Logout and close browser
