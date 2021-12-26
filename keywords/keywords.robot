@@ -16,6 +16,7 @@ Library           RPA.Robocorp.Vault
 Open the robot order website
     Open Available Browser    ${URL_ORDERWEBSITE}    maximize=true
     ${logout_visible}    Is Element Visible    logout
+    ${secrets}=    Get Secret    credentials
     IF    ${logout_visible} == ${TRUE}
         Click Button    logout
     END
