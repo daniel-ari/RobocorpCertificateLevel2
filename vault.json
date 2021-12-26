@@ -1,6 +1,5 @@
 {
-    "credentials": {
-        "username": "maria",
-        "password": "thoushallnotpass"
+    "secret": {
+        "url_orders": "https://robotsparebinindustries.com/orders.csv"
     }
 }

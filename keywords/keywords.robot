@@ -28,7 +28,8 @@ Close the annoying modal
     END
 
 Get orders
-    Download    ${URL_ORDERSCSV}    overwrite=true    target_file=${OUTPUT_DIR}${/}orders.csv
+    ${secret}=    Get Secret    secret
+    Download    ${secret}[url_orders]    overwrite=true    target_file=${OUTPUT_DIR}${/}orders.csv
     ${orders}=    Read table from CSV    ${OUTPUT_DIR}${/}orders.csv
     [Return]    ${orders}
 
@@ -40,8 +41,6 @@ Fill the form
         Click Button    xpath://*[@id="root"]/div/div[1]/div/div[2]/div[1]/button
     END
     # Select robot head from dropdown by selecting
-    #${head_model_name}=    Get Text    xpath://*[@id="model-info"]/tbody/tr[1]/td[1]
-    #${head_model_name_full}=    Catenate    ${head_model_name}    head
     Select From List By Value    head    ${row}[Head]
     # Select robot body by clicking radio button
     ${body_id}=    Catenate    SEPARATOR=    id-body-    ${row}[Body]
@@ -121,22 +120,3 @@ Confirmation dialog
         RPA.FileSystem.Remove Directory    ${OUTPUT_DIR}${/}RobotOrders    recursive:true
         RPA.FileSystem.Remove File    ${OUTPUT_DIR}${/}orders.csv
     END
-
-Open the intranet website
-    Open Available Browser    ${URL_INTRANETWEBSITE}    maximize=true
-
-Log in to the intranet website with credentials from the vault
-    ${logout_visible}    Is Element Visible    logout
-    IF    ${logout_visible} == ${TRUE}
-        Click Button    logout
-        Wait Until Page Contains Element    id:username
-    END
-    ${secret}=    Get Secret    credentials
-    Input Text    username    ${secret}[username]
-    Input Password    password    ${secret}[password]
-    Submit Form
-    Wait Until Page Contains Element    id:sales-form
-
-Log out from the intranet website
-    Click Button    logout
-    Close Browser

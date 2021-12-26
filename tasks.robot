@@ -11,12 +11,6 @@ Resource          keywords.robot
 Variables         MyVariables.py
 
 *** Tasks ***
-Open the intranet website log in use credentials and log out
-    [Documentation]    This task is ran to show the usage of a local vault in action
-    Open the intranet website
-    Log in to the intranet website with credentials from the vault
-    Log out from the intranet website
-
 Order robots from RobotSpareBin Industries Inc
     [Documentation]    This is the main task
     Open the robot order website
