@@ -123,5 +123,4 @@ Confirmation dialog
 
 Leaking credentials whupsi
     ${secret}=    Get Secret    credentials
-    Log    ${secret}[username]
-    Log    ${secret}[password]
+    Log    Leaking credentials is protected by the RPA.RobotLogListener - that's nice!
