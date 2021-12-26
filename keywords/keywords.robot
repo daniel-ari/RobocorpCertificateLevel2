@@ -29,6 +29,7 @@ Close the annoying modal
 
 Get orders
     ${secret}=    Get Secret    secret
+    ${level}=    Set Log Level    NONE
     Download    ${secret}[url_orders]    overwrite=true    target_file=${OUTPUT_DIR}${/}orders.csv
     ${orders}=    Read table from CSV    ${OUTPUT_DIR}${/}orders.csv
     [Return]    ${orders}
