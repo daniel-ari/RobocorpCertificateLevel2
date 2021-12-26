@@ -120,7 +120,3 @@ Confirmation dialog
         RPA.FileSystem.Remove Directory    ${OUTPUT_DIR}${/}RobotOrders    recursive:true
         RPA.FileSystem.Remove File    ${OUTPUT_DIR}${/}orders.csv
     END
-
-Leaking credentials whupsi
-    ${secret}=    Get Secret    credentials
-    Log    Leaking credentials is protected by the RPA.RobotLogListener - that's nice!

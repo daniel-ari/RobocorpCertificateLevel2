@@ -28,5 +28,4 @@ Order robots from RobotSpareBin Industries Inc
     END
     Create a ZIP file of the receipts
     Confirmation dialog
-    Leaking credentials whupsi
     [Teardown]    Logout and close browser
