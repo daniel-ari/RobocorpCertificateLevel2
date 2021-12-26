@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 4.1.3 (Python 3.7.5 on darwin)" generated="20211226 16:23:33.240" rpa="true" schemaversion="2">
+<suite id="s1" name="Tasks" source="/Users/danielari/Code/Robocorp Certificates/Certificate Level 2/tasks.robot">
+<test id="s1-t1" name="Open the intranet website log in use credentials and log out">
+<status status="FAIL" starttime="20211226 16:23:35.098" endtime="20211226 16:23:35.102">Task case contains no keywords.</status>
+</test>
+<doc>Orders robots from RobotSpareBin Industries Inc.
+Saves the order HTML receipt as a PDF file.
+Saves the screenshot of the ordered robot.
+Embeds the screenshot of the robot to the PDF receipt.
+Creates ZIP archive of the receipts and the images.</doc>
+<status status="FAIL" starttime="20211226 16:23:33.244" endtime="20211226 16:23:35.104"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tasks</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="1" skip="0" id="s1" name="Tasks">Tasks</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

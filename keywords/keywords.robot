@@ -16,13 +16,13 @@ Library           RPA.Robocorp.Vault
 Open the robot order website
     Open Available Browser    ${URL_ORDERWEBSITE}    maximize=true
     ${logout_visible}    Is Element Visible    logout
-    ${secrets}=    Get Secret    credentials
     IF    ${logout_visible} == ${TRUE}
+        Close the annoying modal
         Click Button    logout
     END
 
 Close the annoying modal
-    ${yep_i_give_up_my_rights_button_exists}    Does Page Contain Button    css:button[class="btn btn-warning"]
+    ${yep_i_give_up_my_rights_button_exists}    Is Element Visible    css:button[class="btn btn-warning"]
     IF    ${yep_i_give_up_my_rights_button_exists} == ${TRUE}
         Click Button    css:button[class="btn btn-warning"]
     END
@@ -121,3 +121,22 @@ Confirmation dialog
         RPA.FileSystem.Remove Directory    ${OUTPUT_DIR}${/}RobotOrders    recursive:true
         RPA.FileSystem.Remove File    ${OUTPUT_DIR}${/}orders.csv
     END
+
+Open the intranet website
+    Open Available Browser    ${URL_INTRANETWEBSITE}    maximize=true
+
+Log in to the intranet website with credentials from the vault
+    ${logout_visible}    Is Element Visible    logout
+    IF    ${logout_visible} == ${TRUE}
+        Click Button    logout
+        Wait Until Page Contains Element    id:username
+    END
+    ${secret}=    Get Secret    credentials
+    Input Text    username    ${secret}[username]
+    Input Password    password    ${secret}[password]
+    Submit Form
+    Wait Until Page Contains Element    id:sales-form
+
+Log out from the intranet website
+    Click Button    logout
+    Close Browser
